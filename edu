@@ -1,0 +1,734 @@
+{% extends "base.html" %}
+
+{% block title %}Education Certification | ESS{% endblock %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Global layout container mimicking the reference layout */
+    .portal-container {
+        display: flex;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        background-color: #f3f4f6;
+        min-height: 100vh;
+    }
+
+    /* Left Sidebar Styling */
+    .portal-sidebar {
+        width: 220px;
+        background-color: #e9d5ff;
+        /* Light purple menu stack background */
+        border-right: 1px solid #d8b4fe;
+        flex-shrink: 0;
+    }
+
+    .sidebar-section-header {
+        background-color: #c084fc;
+        color: #000;
+        font-weight: bold;
+        padding: 8px 12px;
+        border-bottom: 1px solid #a855f7;
+    }
+
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar-menu li a {
+        display: block;
+        padding: 6px 12px;
+        color: #000;
+        text-decoration: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .sidebar-menu li.active a {
+        background-color: #a855f7;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    /* Central Workspace Panel */
+    .portal-workspace {
+        flex: 1;
+        background-color: #ffffff;
+        border-right: 1px solid #cbd5e1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .workspace-header {
+        background-color: var(--form-heading);
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 15px;
+        text-align: center;
+        padding: 8px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #cbd5e1;
+    }
+
+    tbody td,
+    label,
+    option {
+        font-family: 'Poppins', sans-serif
+    }
+
+    /* Structured Field Layout */
+    .form-grid-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .form-grid-table td {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 6px 12px;
+        vertical-align: middle;
+    }
+
+    .label-cell {
+        width: 35%;
+        text-align: right;
+        font-weight: normal;
+        color: #334155;
+        background-color: #ffffff;
+        padding-right: 15px !important;
+    }
+
+    .required-star {
+        color: #dc2626;
+        margin-right: 2px;
+    }
+
+    .input-cell {
+        width: 65%;
+    }
+
+    .flat-input,
+    .flat-select {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 13px;
+        background-color: #ffffff;
+        color: #0f172a;
+    }
+
+    .communication-table {
+        border-bottom: 3px solid #334155;
+    }
+
+    .flat-input[type="file"] {
+        border: 1px solid #cbd5e1;
+        padding: 8px 10px;
+        background: #ffffff;
+        border-radius: 8px;
+        width: 100%;
+    }
+
+    .education-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: #ffffff;
+        border: 1px solid #ececec;
+    }
+
+    .education-table th,
+    .education-table td {
+        padding: 12px 14px;
+        font-size: 13px;
+        color: #334155;
+        vertical-align: top;
+        border: 1px solid #f0f0f0;
+    }
+
+    .education-table thead {
+        background: #f8fafc;
+    }
+
+    .education-table th,
+    .education-table td {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #475569;
+    }
+
+    /* .education-table tbody tr:last-child td {
+        border-bottom: 2px solid #cbd3df !important;
+    } */
+    .education-table .subtype-label {
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .education-table .upload-note {
+        font-size: 11px;
+        color: #64748b;
+    }
+
+    /* Form control action panel at footer */
+    .action-panel {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding: 15px;
+        background-color: #ffffff;
+    }
+
+    .btn-portal {
+        min-width: 80px;
+        padding: 6px 16px;
+        font-size: 13px;
+        border: 1px solid var(--form-submit);
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #ffffff;
+        color: #000000;
+    }
+
+    .btn-portal-submit {
+        background-color: var(--form-submit);
+        color: #ffffff;
+    }
+
+
+    /* Right Split Area: Action triggers and Read-only Verification Feed */
+    .portal-status-pane {
+        width: 300px;
+        background-color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+    }
+
+    .status-top-bar {
+        display: flex;
+        border-bottom: 1px solid #cbd5e1;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 8px;
+        font-size: 12px;
+        border: none;
+        background-color: #f1f5f9;
+        border-right: 1px solid #cbd5e1;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .tab-btn.active {
+        background-color: #ffffff;
+        font-weight: bold;
+    }
+
+    .tab-btn-header-purple {
+        background-color: var(--form-heading);
+        font-weight: bold;
+    }
+
+    /* Right column record tracker stack */
+    .status-feed-container {
+        padding: 12px;
+        overflow-y: auto;
+    }
+
+    .status-card {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .status-card-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 4px;
+        margin-bottom: 6px;
+    }
+
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        font-size: 12px;
+    }
+
+    .data-val {
+        font-weight: bold;
+        color: #1e293b;
+    }
+
+    .btn-view {
+        padding: 4px 10px;
+        font-size: 9.5px;
+        min-width: auto;
+        border: 1px solid #cbd5e1;
+        background-color: #ffffff;
+        color: #0f172a;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        padding: 4px 10px;
+        font-size: 9.5px;
+        min-width: auto;
+        border: 1px solid #cbd5e1;
+        background-color: #ffffff;
+        color: #0f172a;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+</style>
+
+{% endblock %}
+{% block content %}
+<div class="portal-container">
+
+
+
+    <!-- Center Module Area: Data Input Form Grid -->
+    <main class="portal-workspace">
+        <div class="workspace-header">Education Certification Overview</div>
+
+        <!-- Django Messaging Notification Alerts -->
+        {% if messages %}
+        {% for message in messages %}
+        <div style="background-color: #eff6ff; color: #1e40af; padding: 10px; font-size: 13px; border-bottom: 1px solid #bfdbfe;"
+            role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'education_certification_workspace' %}" enctype="multipart/form-data"
+            style="margin: 0; flex: 1;">
+            {% csrf_token %}
+            <table class="education-table">
+                <thead>
+                    <tr>
+                        <th>Subtype</th>
+                        <th>Begin Date</th>
+                        <th>End Date</th>
+                        <th>Details</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Secondary Row -->
+                    <tr class="education-row" data-subtype="Secondary">
+                        <td class="subtype-label">
+                            <input type="hidden" name="subtype" value="Secondary">
+                            <span>Secondary</span>
+                        </td>
+                        <td><input type="date" name="begin_date" value="{{ education_map.Secondary.begin_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="date" name="end_date" value="{{ education_map.Secondary.end_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="text" name="details" value="{{ education_map.Secondary.details }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td class="file-cell" style="vertical-align: middle;">
+                            <div style="display: flex; flex-direction: row; gap: 4px; align-items: flex-start;">
+                                {% if education_map.Secondary.file_url %}
+                                <a href="{{ education_map.Secondary.file_url }}" target="_blank" class="btn-view">
+                                    <span>View</span>
+                                </a>
+                                <a href="#" target="_blank" class="btn-edit">
+                                    <span>Edit</span>
+                                </a>
+
+                                {% endif %}
+                                <input type="file" id="file_input_secondary" name="cert_file_Secondary"
+                                    class="flat-input row-input" style="display:none;" accept=".pdf,.jpg,.jpeg,.png">
+                                <button type="button" class="btn-portal"
+                                    style="padding: 5px 10px; font-size: 11px; min-width: auto; border: 1px solid #cbd5e1;"
+                                    onclick="document.getElementById('file_input_secondary').click()">Upload
+                                    File</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Senior Secondary Row -->
+                    <tr class="education-row" data-subtype="Senior Secondary">
+                        <td class="subtype-label">
+                            <input type="hidden" name="subtype" value="Senior Secondary">
+                            <span>Senior Secondary</span>
+                        </td>
+                        <td><input type="date" name="begin_date" value="{{ education_map.Senior_Secondary.begin_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="date" name="end_date" value="{{ education_map.Senior_Secondary.end_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="text" name="details" value="{{ education_map.Senior_Secondary.details }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td class="file-cell" style="vertical-align: middle;">
+                            <div style="display: flex; flex-direction: row; gap: 4px; align-items: flex-start;">
+                                {% if education_map.Senior_Secondary.file_url %}
+                                <a href="{{ education_map.Senior_Secondary.file_url }}" target="_blank"
+                                    class="btn-view">
+                                    <span>View</span>
+                                </a>
+                                <a href="#" target="_blank" class="btn-edit">
+                                    <span>Edit</span>
+                                </a>
+                                {% endif %}
+                                <input type="file" id="file_input_senior" name="cert_file_Senior_Secondary"
+                                    class="flat-input row-input" style="display:none;" accept=".pdf,.jpg,.jpeg,.png">
+                                <button type="button" class="btn-portal"
+                                    style="padding: 4px 10px; font-size: 11px; min-width: auto; border: 1px solid #cbd5e1;"
+                                    onclick="document.getElementById('file_input_senior').click()">Upload File</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Graduation Row -->
+                    <tr class="education-row" data-subtype="Graduation">
+                        <td class="subtype-label">
+                            <input type="hidden" name="subtype" value="Graduation">
+                            <span>Graduation</span>
+                        </td>
+                        <td><input type="date" name="begin_date" value="{{ education_map.Graduation.begin_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="date" name="end_date" value="{{ education_map.Graduation.end_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="text" name="details" value="{{ education_map.Graduation.details }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td class="file-cell" style="vertical-align: middle;">
+                            <div style="display: flex; flex-direction: row; gap: 4px; align-items: flex-start;">
+                                {% if education_map.Graduation.file_url %}
+                                <a href="{{ education_map.Graduation.file_url }}" target="_blank" class="btn-view">
+                                    <span>View</span>
+                                </a>
+                                <a href="#" target="_blank" class="btn-edit">
+                                    <span>Edit</span>
+                                </a>
+                                {% endif %}
+                                <input type="file" id="file_input_graduation" name="cert_file_Graduation"
+                                    class="flat-input row-input" style="display:none;" accept=".pdf,.jpg,.jpeg,.png">
+                                <button type="button" class="btn-portal"
+                                    style="padding: 4px 10px; font-size: 11px; min-width: auto; border: 1px solid #cbd5e1;"
+                                    onclick="document.getElementById('file_input_graduation').click()">Upload
+                                    File</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Diploma Row -->
+                    <tr class="education-row" data-subtype="Diploma">
+                        <td class="subtype-label">
+                            <input type="hidden" name="subtype" value="Diploma">
+                            <span>Diploma-Technical</span>
+                        </td>
+                        <td><input type="date" name="begin_date" value="{{ education_map.Diploma.begin_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="date" name="end_date" value="{{ education_map.Diploma.end_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="text" name="details" value="{{ education_map.Diploma.details }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td class="file-cell" style="vertical-align: middle;">
+                            <div style="display: flex; flex-direction: row; gap: 4px; align-items: flex-start;">
+                                {% if education_map.Diploma.file_url %}
+                                <a href="{{ education_map.Diploma.file_url }}" target="_blank" class="btn-view">
+                                    <span>View</span>
+                                </a>
+                                <a href="#" target="_blank" class="btn-edit">
+                                    <span>Edit</span>
+                                </a>
+                                {% endif %}
+                                <input type="file" id="file_input_diploma" name="cert_file_Diploma"
+                                    class="flat-input row-input" style="display:none;" accept=".pdf,.jpg,.jpeg,.png">
+                                <button type="button" class="btn-portal"
+                                    style="padding: 4px 10px; font-size: 11px; min-width: auto; border: 1px solid #cbd5e1;"
+                                    onclick="document.getElementById('file_input_diploma').click()">Upload File</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Tech Certificates Row -->
+                    <tr class="education-row" data-subtype="Tech Certificates">
+                        <td class="subtype-label">
+                            <input type="hidden" name="subtype" value="Tech Certificates">
+                            <span>Tech Certification</span>
+                        </td>
+                        <td><input type="date" name="begin_date"
+                                value="{{ education_map.Tech_Certificates.begin_date }}" class="flat-input row-input"
+                                style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="date" name="end_date" value="{{ education_map.Tech_Certificates.end_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="text" name="details" value="{{ education_map.Tech_Certificates.details }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td class="file-cell" style="vertical-align: middle;">
+                            <div style="display: flex; flex-direction: row; gap: 4px; align-items: flex-start;">
+                                {% if education_map.Tech_Certificates.file_url %}
+                                <a href="{{ education_map.Tech_Certificates.file_url }}" target="_blank"
+                                    class="btn-view">
+                                    <span>View</span>
+                                </a>
+                                <a href="#" target="_blank" class="btn-edit">
+                                    <span>Edit</span>
+                                </a>
+                                {% endif %}
+                                <input type="file" id="file_input_tech" name="cert_file_Tech_Certificates"
+                                    class="flat-input row-input" style="display:none;" accept=".pdf,.jpg,.jpeg,.png">
+                                <button type="button" class="btn-portal"
+                                    style="padding: 4px 10px; font-size: 11px; min-width: auto; border: 1px solid #cbd5e1;"
+                                    onclick="document.getElementById('file_input_tech').click()">Upload File</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Internship Certificates Row -->
+                    <tr class="education-row" data-subtype="Internship Certificates">
+                        <td class="subtype-label">
+                            <input type="hidden" name="subtype" value="Internship Certificates">
+                            <span>Internship Certification</span>
+                        </td>
+                        <td><input type="date" name="begin_date"
+                                value="{{ education_map.Internship_Certificates.begin_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="date" name="end_date"
+                                value="{{ education_map.Internship_Certificates.end_date }}"
+                                class="flat-input row-input" style="border: 1px solid var(--form-border);"></td>
+                        <td><input type="text" name="details"
+                                value="{{ education_map.Internship_Certificates.details }}" class="flat-input row-input"
+                                style="border: 1px solid var(--form-border);"></td>
+                        <td class="file-cell" style="vertical-align: middle;">
+                            <div style="display: flex; flex-direction: row; gap: 4px; align-items: flex-start;">
+                                {% if education_map.Internship_Certificates.file_url %}
+                                <a href="{{ education_map.Internship_Certificates.file_url }}" target="_blank"
+                                    class="btn-view">
+                                    <span>View</span>
+                                </a>
+                                <a href="#" target="_blank" class="btn-edit">
+                                    <span>Edit</span>
+                                </a>
+                                {% endif %}
+                                <input type="file" id="file_input_internship" name="cert_file_Internship_Certificates"
+                                    class="flat-input row-input" style="display:none;" accept=".pdf,.jpg,.jpeg,.png">
+                                <button type="button" class="btn-portal"
+                                    style="padding: 4px 10px; font-size: 11px; min-width: auto; border: 1px solid #cbd5e1;"
+                                    onclick="document.getElementById('file_input_internship').click()">Upload
+                                    File</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Center Column Footer Actions -->
+            <div style="display: flex; justify-content: center;">
+                <div class="action-panel">
+                    <button type="submit" class="btn-portal btn-portal-submit">Save</button>
+                </div>
+                <div class="action-panel">
+                    <button type="submit" class="btn-portal btn-portal-submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </main>
+    <script>
+        // Show selected file name feedback when a file is selected
+        document.querySelectorAll('input[type="file"]').forEach(function (input) {
+            input.addEventListener('change', function () {
+                if (this.files && this.files.length > 0) {
+                    var fileName = this.files[0].name;
+                    var container = this.closest('div');
+                    var existingBadge = container.querySelector('.selected-file-badge');
+                    if (existingBadge) {
+                        existingBadge.textContent = "Selected: " + fileName;
+                    } else {
+                        var badge = document.createElement('span');
+                        badge.className = 'selected-file-badge';
+                        badge.style.cssText = 'color: #2563eb; font-size: 11px; margin-top: 4px; display: inline-block; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;';
+                        badge.textContent = "Selected: " + fileName;
+                        container.appendChild(badge);
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- Right Sidebar Pane: Qualifications Table & Workflow Status Logs -->
+    <section class="portal-status-pane">
+        <!-- Tab Navigation Bar -->
+        <div class="status-top-bar">
+            <button type="button" class="tab-btn-existing active" id="tab-existing"
+                onclick="switchRightTab('existing')">Existing</button>
+            <button type="button" class="tab-btn-help" id="tab-help" onclick="switchRightTab('help')">Help</button>
+            <button type="button" class="tab-btn-status tab-btn-header-purple" id="tab-workflow"
+                onclick="switchRightTab('workflow')">Approval Flow/Status</button>
+        </div>
+
+        <div class="status-feed-container">
+
+            <!-- VIEW 1: Existing Tab (Displays the Roster List View Table) -->
+            <!-- <div id="view-existing" class="tab-content-view" style="display: block;">
+                {% if records %}
+                <table class="flat-table" style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; border: 1px solid #e2e8f0; background-color: #ffffff; border-radius: 4px; overflow: hidden;">
+                    <thead>
+                        <tr style="background-color: #f8fafc; border-bottom: 1px solid var(--form-border);">
+                            <th style="padding: 8px 10px; font-weight: 600; color: #475569; text-align: left; text-transform: uppercase; font-size: 10px; letter-spacing: 0.03em;">Subtype</th>
+                            <th style="padding: 8px 10px; font-weight: 600; color: #475569; text-align: left; text-transform: uppercase; font-size: 10px; letter-spacing: 0.03em;">Duration</th>
+                            <th style="padding: 8px 10px; font-weight: 600; color: #475569; text-align: right; text-transform: uppercase; font-size: 10px; letter-spacing: 0.03em;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in records %}
+                        <tr style="border-bottom: 1px solid #e4f0ff;">
+                            <td style="padding: 10px 10px; color: #0f172a; font-weight: 600;">
+                                <div style="font-size: 11px;">{{ item.subtype }}</div>
+                                <div style="font-size: 10.5px; padding: 4px; color: #64748b; font-weight: normal; margin-top: 2px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ item.details }}">
+                                    {{ item.details }}
+                                </div>
+                            </td>
+                            <td style="padding: 10px 10px; color: #64748b; font-family: monospace; font-size: 10.5px; white-space: nowrap; vertical-align: middle;">
+                                {{ item.begin_date }}<br>→ {{ item.end_date }}
+                            </td>
+                            <td style="padding: 10px 10px; text-align: right; white-space: nowrap; vertical-align: middle;">
+                                {% if item.file_url %}
+                                    <a href="{{ item.file_url }}" target="_blank" style="color: #6b21a8; text-decoration: none; font-weight: 600; margin-right: 6px;">View</a>
+                                    <button type="button" style="background: none; border: none; padding: 0; color: #475569; font-size: 12px; font-weight: 500; cursor: pointer;" onclick="triggerEditModal('{{ item.subtype|escapejs }}', '{{ item.details|escapejs }}')">Edit</button>
+                                {% else %}
+                                    <span style="color: #94a3b8; font-style: italic;">No file</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div style="border: 1px dashed #cbd5e1; padding: 24px; border-radius: 6px; text-align: center; background-color: #ffffff; margin-top: 4px;">
+                    <p style="color: #64748b; margin: 0; font-size: 12px;">No academic qualification records found.</p>
+                </div>
+                {% endif %}
+            </div> -->
+
+            <!-- VIEW 2: Help Tab -->
+            <div id="view-help" class="tab-content-view" style="display: none;">
+                <div style="padding: 5px; font-size: 12px; color: #334155; line-height: 1.5;">
+                    <h4 style="margin: 0 0 6px 0; font-size: 13px;">Academic Audit Guidelines</h4>
+                    <p style="margin: 0 0 8px 0;">Upload scans of degree certificates or official final-semester mark
+                        sheets. Scans must be fully readable by the HR compliance branch.</p>
+                </div>
+            </div>
+
+            <!-- VIEW 3: Approval Flow/Status Tab -->
+            <div id="view-workflow" class="tab-content-view" style="display: none;">
+                {% if records %}
+                {% with latest_record=records|last %}
+                <div class="status-card">
+                    <div class="status-card-header">
+                        <span>{{ latest_record.subtype }}</span>
+                        <span style="color: #b45309;">Awaiting Audit</span>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Institution:</span>
+                        <span class="data-val"
+                            style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                            title="{{ latest_record.details }}">{{ latest_record.details }}</span>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Completed:</span>
+                        <span class="data-val">{{ latest_record.end_date }}</span>
+                    </div>
+
+                    <!-- Approval Flow Tracking Timeline Section -->
+                    <div style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+                        <span
+                            style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">
+                            Approval Progress
+                        </span>
+
+                        <!-- Timeline Step 1 -->
+                        <div style="display: flex; gap: 8px; font-size: 12px; margin-bottom: 6px;">
+                            <div style="color: #166534; font-weight: bold;">✓</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #334155;">Record Registered</div>
+                                <div style="font-size: 11px; color: #64748b;">Credentials uploaded to background file
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Step 2 -->
+                        <div style="display: flex; gap: 8px; font-size: 12px;">
+                            <div style="color: #94a3b8; font-weight: bold;">○</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #94a3b8;">Background Verification</div>
+                                <div style="font-size: 11px; color: #94a3b8;">Pending institutional credential match
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Read-only Reference Verification Feed -->
+                    <div
+                        style="margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 12px; background-color: #f8fafc; border-radius: 4px; padding: 8px;">
+                        <span
+                            style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; display: block; margin-bottom: 8px;">
+                            Registry Audit Data
+                        </span>
+
+                        <div style="font-family: monospace; font-size: 11px; color: #334155; line-height: 1.5;">
+                            <div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px;">
+                                <span style="color: #64748b;">CREDENTIAL:</span>
+                                <span style="font-weight: 600; float: right; text-transform: uppercase;">{{
+                                    latest_record.subtype }}</span>
+                            </div>
+                            <div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px;">
+                                <span style="color: #64748b;">DURATION:</span>
+                                <span style="font-weight: 600; float: right;">{{ latest_record.begin_date }} / {{
+                                    latest_record.end_date }}</span>
+                            </div>
+                            <div>
+                                <span style="color: #64748b;">DECLARED BY:</span>
+                                <span style="font-weight: 600; float: right; text-transform: uppercase;">{{
+                                    identity_demographics.first_name }} {{ identity_demographics.last_name }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% endwith %}
+                {% else %}
+                <p style="color: #64748b; text-align: center; margin-top: 20px;">No registered metrics tracking
+                    workflow.</p>
+                {% endif %}
+            </div> <!-- Closes #view-workflow -->
+
+        </div> <!-- Closes .status-feed-container -->
+    </section>
+
+</div> <!-- Closes .portal-container -->
+
+<!-- Vanilla JavaScript View Switcher Engine -->
+<script>
+    function switchRightTab(targetTab) {
+        // Hide all right sidebar panels
+        document.querySelectorAll('.tab-content-view').forEach(view => {
+            view.style.display = 'none';
+        });
+
+        // Clear active class states from header buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Activate and display targeted tab selection
+        document.getElementById('view-' + targetTab).style.display = 'block';
+        document.getElementById('tab-' + targetTab).classList.add('active');
+    }
+
+    function triggerEditModal(subtype, currentDetails) {
+        console.log("Edit credentials targeting subtype context:", subtype, currentDetails);
+        // Add your operational edit panel trigger logic here
+    }
+</script>
+{% endblock %}
