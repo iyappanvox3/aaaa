@@ -1,0 +1,542 @@
+{% extends "base.html" %}
+{% block extra_css %}
+{% include "personal_information/_pi_theme.html" %}
+<style>
+    /* Global layout container mimicking the reference layout */
+    .portal-container {
+        display: flex;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        background-color: #f3f4f6;
+        min-height: 100vh;
+    }
+
+    /* Left Sidebar Styling */
+    .portal-sidebar {
+        width: 220px;
+        background-color: #e9d5ff; /* Light purple menu stack background */
+        border-right: 1px solid #d8b4fe;
+        flex-shrink: 0;
+    }
+    .sidebar-section-header {
+        background-color: #c084fc;
+        color: #000;
+        font-weight: bold;
+        padding: 8px 12px;
+        border-bottom: 1px solid #a855f7;
+    }
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .sidebar-menu li a {
+        display: block;
+        padding: 6px 12px;
+        color: #000;
+        text-decoration: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .sidebar-menu li.active a {
+        background-color: #a855f7;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    /* Central Workspace Panel */
+    .portal-workspace {
+        flex: 1;
+        background-color: #ffffff;
+        border-right: 1px solid #cbd5e1;
+        display: flex;
+        flex-direction: column;
+    }
+    .workspace-header {
+        background-color: var(--form-heading);
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 15px;
+        text-align: center;
+        padding: 8px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #cbd5e1;
+    }
+     tbody td,label,option {
+     font-family: 'Poppins', sans-serif
+}
+
+    /* Structured Field Layout */
+    .form-grid-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .form-grid-table td {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 6px 12px;
+        vertical-align: middle;
+    }
+    /* Utility cell-centering class for specific rows */
+    .form-grid-table td.center {
+        text-align: center;
+    }
+    /* Center the right-side/input column cells */
+    
+    .label-cell {
+        width: 35%;
+        text-align: right;
+        font-weight: normal;
+        color: #334155;
+        background-color: #ffffff;
+        padding-right: 15px !important;
+    }
+    .required-star {
+        color: #dc2626;
+        margin-right: 2px;
+    }
+    .input-cell {
+        width: 65%;
+    }
+    .flat-input, .flat-select {
+        width: 250px;
+        padding: 4px 6px;
+        border: 1px solid #94a3b8;
+        border-radius: 3px;
+        font-size: 13px;
+        background-color: #ffffff;
+    }
+    .flat-input[type="file"] {
+        border: none;
+        padding: 0;
+        background: transparent;
+    }
+
+    /* Form control action panel at footer */
+    .action-panel {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding: 15px;
+        background-color: #ffffff;
+    }
+    .btn-portal {
+        min-width: 80px;
+        padding: 6px 16px;
+        font-size: 13px;
+        border: 1px solid var(--form-submit);
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #ffffff;
+        color: #000000;
+    }
+    .btn-portal-submit {
+        background-color: var(--form-submit);
+        color: #ffffff;
+    }
+
+    /* Right Split Area: Action triggers and Read-only Verification Feed */
+    .portal-status-pane {
+        width: 300px;
+        background-color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+    }
+    .status-top-bar {
+        display: flex;
+        border-bottom: 1px solid #cbd5e1;
+    }
+    .tab-btn {
+        flex: 1;
+        padding: 8px;
+        font-size: 12px;
+        border: none;
+        background-color: #f1f5f9;
+        border-right: 1px solid #cbd5e1;
+        cursor: pointer;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background-color: #ffffff;
+        font-weight: bold;
+    }
+    .tab-btn-header-purple {
+        background-color: var(--form-heading);
+        font-weight: bold;
+    }
+
+    /* Right column record tracker stack */
+    .status-feed-container {
+        padding: 12px;
+        overflow-y: auto;
+    }
+    .status-card {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .status-card-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 4px;
+        margin-bottom: 6px;
+    }
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        font-size: 12px;
+    }
+    .data-val {
+        font-weight: bold;
+        color: #1e293b;
+    }
+    .label-cells {
+        margin-left: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="portal-container">
+    
+    <!-- Left Navigation Sidebar -->
+    
+
+    <!-- Center Module Area: Data Verification Sheet & Form Dispatch -->
+    <main class="portal-workspace">
+        <div class="workspace-header">ID Card Request </div>
+        
+        <!-- Django Messaging Notification Alerts -->
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background-color: #eff6ff; color: #1e40af; padding: 10px; font-size: 13px; border-bottom: 1px solid #bfdbfe;" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div style="padding: 16px; margin: 0; flex: 1; background-color: #ffffff;">
+                     <table class="form-grid-table" style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+    <tbody>
+        <tr>
+            <td class="label-cell">Full Name</td>
+            <td class="input-cell" style="font-weight: 600; color: #0f172a;">{{ request.user.username }}</td>
+        </tr>
+         <tr id="preview-row" style="display: none;">
+    <td class="label-cell"></td>
+    <!-- Added padding-left to shift the internal components completely to the right -->
+    <td class="input-cell" style="padding-left: 450px !important;">
+        <!-- Matrix Manipulation Frame Box View Container -->
+        <div style="width: 140px; height: 140px; border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #f8fafc; margin-bottom: 8px;">
+            <img id="imageLivePreview" src="" alt="Live crop preview" style="max-width: 100%; max-height: 100%; transition: transform 0.1s ease-out; object-fit: contain;">
+        </div>
+        <!-- Structural Transformation Controls Interface Row -->
+        <div style="display: flex; gap: 4px;">
+            <button type="button" class="btn-portal" style="min-width: auto; padding: 2px 8px; font-size: 12px;" onclick="adjustImageTransform('zoom-in')">+</button>
+            <button type="button" class="btn-portal" style="min-width: auto; padding: 2px 8px; font-size: 12px;" onclick="adjustImageTransform('zoom-out')">-</button>
+            <button type="button" class="btn-portal" style="min-width: auto; padding: 2px 8px; font-size: 12px;" onclick="adjustImageTransform('rotate')">⟳</button>
+            <button type="button" class="btn-portal" style="min-width: auto; padding: 2px 8px; font-size: 12px; color: #b91c1c; border-color: #fca5a5;" onclick="adjustImageTransform('reset')">Clear</button>
+        </div>
+    </td>
+</tr>
+
+        <tr>
+            <td class="label-cell">Employee ID</td>
+            <td class="input-cell" style="font-weight: 600; color: #1e3a8a;">{{ request.user.id|default:"EMP001" }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Request Type</td>
+            <td class="input-cell" style="font-weight: 600; color: #1e3a8a;">{{ request.user.request_type|default:"none" }}</td>
+        </tr>
+        <tr>
+                        <td class="label-cell"><span class="required-star">*</span>Upload Id Card Image </td>
+                        <td class="input-cell">
+                            <input type="file" id="fileInputSelector" name="profile_photo" accept=".jpg,.jpeg,.png" required class="flat-input" onchange="handleFilePreview(this)">
+                        </td>
+                    </tr>
+                   
+        
+       
+    </tbody>
+</table>
+
+
+             <!-- <div class="form-group full-width" style="margin-top:15px;">
+                    <label class="checkbox-label-wrap" style="line-height:1.5;">
+                        <input type="checkbox" name="consent_checkbox" required>
+                        <span>I Accept that all information provided is correct to the best of my knowledge . I Understand that i used to upload my professional photograph only</span>
+                    </label>
+                </div> -->
+
+            {% if request_status == "Not Requested" %}
+                <form method="POST" action="/personal-information/id-card-workspace/" style="margin: 0; padding: 0 12px;">
+                    {% csrf_token %}
+                    <div style="background-color: #fff; border: 1px solid #cbd5e1; border-radius: 4px; padding: 12px; margin-bottom: 16px;">
+                        <label style="display: flex; align-items: start; gap: 10px; cursor: pointer; font-size: 12.5px; font-weight: 500; color: #334155; user-select: none; line-height: 1.4;">
+                            <input type="checkbox" required style="width: 15px; height: 15px; margin-top: 2px; cursor: pointer;">
+                            <span>I Accept that all information provided is correct to the best of my knowledge . I Understand that i used to upload my professional photograph only</span>
+                        </label>
+                    </div>
+
+                    <div class="action-panel" style="justify-content: center; padding: 0;">
+                        <button type="submit" class="btn-portal btn-portal-submit" style="padding: 8px 24px;">
+                            Save
+                        </button>
+                        <button type="submit" class="btn-portal btn-portal-submit" style="padding: 8px 24px;">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            {% else %}
+                
+            {% endif %}
+
+            
+        </div>
+    </main>
+
+    <!-- Right Sidebar Pane: Verification Roster Tab & Dynamic Printing Flow Timeline -->
+    <section class="portal-status-pane">
+        <!-- Tab Navigation Bar -->
+        <div class="status-top-bar">
+            <button type="button" class="tab-btn-existing active" id="tab-existing" onclick="switchRightTab('existing')">Existing</button>
+            <button type="button" class="tab-btn-help" id="tab-help" onclick="switchRightTab('help')">Help</button>
+            <button type="button" class="tab-btn-status tab-btn-header-purple" id="tab-workflow" onclick="switchRightTab('workflow')">Approval Flow/Status</button>
+        </div>
+
+        <div class="status-feed-container">
+            
+            
+            <div id="view-existing" class="tab-content-view" style="display: block;">
+                <div class="status-card">
+                    <div class="status-card-header">
+                        <span>Request Status</span>
+                        {% if request_status == "Not Requested" %}
+                            <span style="color: #475569;">Not Initiated</span>
+                        {% elif request_status == "Pending" %}
+                            <span style="color: #b45309;">In Review</span>
+                        {% elif request_status == "Approved" %}
+                            <span style="color: #166534;">In Print Queue</span>
+                        {% endif %}
+                    </div>
+                    <div class="data-row">
+                        <span>Employee Name:</span>
+                        <span class="data-val">{{ request.user.username }}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>Office Worksite:</span>
+                        <span class="data-val">{{ request.user.personal_details.addresses.office_worksite|default:"Voxlom" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 2: Help Tab -->
+            <div id="view-help" class="tab-content-view" style="display: none;">
+                <div style="padding: 5px; font-size: 12px; color: #334155; line-height: 1.5;">
+                    <h4 style="margin: 0 0 6px 0; font-size: 13px;">ID Production Rules</h4>
+                    <p style="margin: 0 0 8px 0;">Official security badges map data directly from active database parameters. If your blood group or designation is out of sync, please update your main demographic profile fields before submission.</p>
+                </div>
+            </div>
+
+            <!-- VIEW 3: Printing Flow Progress Tab -->
+            <div id="view-workflow" class="tab-content-view" style="display: none;">
+                <div class="status-card">
+                    <div class="status-card-header">
+                        <span>HR Batch Tracking</span>
+                        <span style="color: #334155;">{{ request_status|upper }}</span>
+                    </div>
+
+                    <!-- Approval Flow Tracking Timeline Section -->
+                    <div style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+                        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">
+                            Issuance Progress
+                        </span>
+                        
+                        <!-- Timeline Step 1: Request State -->
+                        <div style="display: flex; gap: 8px; font-size: 12px; margin-bottom: 6px;">
+                            {% if request_status != "Not Requested" %}
+                                <div style="color: #166534; font-weight: bold;">✓</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: #334155;">Request Dispatched</div>
+                                    <div style="font-size: 11px; color: #64748b;">Profile snapshot sent to verification desk</div>
+                                </div>
+                                                            {% else %}
+                                <div style="color: #94a3b8; font-weight: bold;">○</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: #94a3b8;">Lodge Request Form</div>
+                                    <div style="font-size: 11px; color: #94a3b8;">Awaiting checklist validation checkbox confirmation</div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Timeline Step 2: HR Audit State -->
+                        <div style="display: flex; gap: 8px; font-size: 12px; margin-bottom: 6px;">
+                            {% if request_status == "Approved" %}
+                                <div style="color: #166534; font-weight: bold;">✓</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: #334155;">HR Security Review</div>
+                                    <div style="font-size: 11px; color: #64748b;">Vitals verified and signed off for distribution</div>
+                                </div>
+                            {% elif request_status == "Pending" %}
+                                <div style="color: #b45309; font-weight: bold;">●</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: #b45309;">HR Security Review</div>
+                                    <div style="font-size: 11px; color: #64748b;">Awaiting operator signature assignment</div>
+                                </div>
+                            {% else %}
+                                <div style="color: #94a3b8; font-weight: bold;">○</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: #94a3b8;">HR Security Review</div>
+                                    <div style="font-size: 11px; color: #94a3b8;">Awaiting dispatch sequence allocation</div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Timeline Step 3: Production Printing State -->
+                        <div style="display: flex; gap: 8px; font-size: 12px;">
+                            {% if request_status == "Approved" %}
+                                <div style="color: #166534; font-weight: bold;">●</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: #166534;">Badge Physical Printing</div>
+                                    <div style="font-size: 11px; color: #64748b;">Sent to facilities smart-card thermal printer array</div>
+                                </div>
+                            {% else %}
+                                <div style="color: #94a3b8; font-weight: bold;">○</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: #94a3b8;">Badge Physical Printing</div>
+                                    <div style="font-size: 11px; color: #94a3b8;">Pending prior pipeline audits</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Read-only Reference Verification Feed -->
+                    <div style="margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 12px; background-color: #f8fafc; border-radius: 4px; padding: 8px;">
+                        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; display: block; margin-bottom: 8px;">
+                            Registry Audit Data
+                        </span>
+
+                        <div style="font-family: monospace; font-size: 11px; color: #334155; line-height: 1.5;">
+                            <div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px;">
+                                <span style="color: #64748b;">badge type:</span> 
+                                <span style="font-weight: 600; float: right; text-transform: uppercase;">standard_employee_rfid</span>
+                            </div>
+                            <div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px;">
+                                <span style="color: #64748b;">security tier:</span> 
+                                <span style="font-weight: 600; float: right;">level_1_access</span>
+                            </div>
+                            <div>
+                                <span style="color: #64748b;">badge holder:</span> 
+                                <span style="font-weight: 600; float: right; text-transform: uppercase;">{{ request.user.username }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div> <!-- Closes #view-workflow -->
+
+        </div> <!-- Closes .status-feed-container -->
+    </section>
+
+</div> <!-- Closes .portal-container -->
+
+<!-- Vanilla JavaScript View Switcher Engine -->
+<script>
+    (function () {
+    let currentScaleValue = 1.0;
+    let currentRotationDegrees = 0;
+
+    const previewImageElement = document.getElementById('imageLivePreview');
+    const previewRow = document.getElementById('preview-row');
+    const fileInput = document.getElementById('fileInputSelector');
+
+    function applyCSSMatrixStyles() {
+        previewImageElement.style.transform = 'scale(' + currentScaleValue + ') rotate(' + currentRotationDegrees + 'deg)';
+    }
+
+    window.handleFilePreview = function (input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImageElement.src = e.target.result;
+            previewRow.style.display = 'table-row';
+            currentScaleValue = 1.0;
+                        currentRotationDegrees = 0;
+            applyCSSMatrixStyles();
+        };
+        reader.readAsDataURL(file);
+    };
+
+    window.adjustImageTransform = function (command) {
+        if (command === 'zoom-in') {
+            currentScaleValue += 0.08;
+        } else if (command === 'zoom-out') {
+            if (currentScaleValue > 0.5) currentScaleValue -= 0.08;
+        } else if (command === 'rotate') {
+            currentRotationDegrees += 90;
+        } else if (command === 'reset') {
+            fileInput.value = '';
+            previewImageElement.src = '';
+            previewRow.style.display = 'none';
+            return;
+        }
+        applyCSSMatrixStyles();
+    };
+
+    window.switchRightTab = function(targetTab) {
+        document.querySelectorAll('.tab-content-view').forEach(view => view.style.display = 'none');
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('view-' + targetTab).style.display = 'block';
+        document.getElementById('tab-' + targetTab).classList.add('active');
+    };
+})();
+function switchRightTab(targetTab) {
+    // Hide all right sidebar panels
+    document.querySelectorAll('.tab-content-view').forEach(view => {
+        view.style.display = 'none';
+    });
+    
+    // Clear active class states from header buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Activate and display targeted tab selection
+    document.getElementById('view-' + targetTab).style.display = 'block';
+    document.getElementById('tab-' + targetTab).classList.add('active');
+}
+function showUploadedImage() {
+  const fileInput = document.getElementById("bloodUpload");
+  const previewDiv = document.getElementById("uploadedImagePreview");
+    // Clear previous preview and center the container
+    previewDiv.innerHTML = "";
+    previewDiv.style.textAlign = 'center';
+    previewDiv.style.width = '100%';
+
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.style.maxWidth = "150px";  // adjust size
+            img.style.display = 'block';
+            img.style.margin = '0 auto';
+            img.style.border = "1px solid #ccc";
+            img.style.borderRadius = "4px";
+            previewDiv.appendChild(img);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+}
+
+
+
+</script>
+{% endblock %}
+
+
