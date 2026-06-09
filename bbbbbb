@@ -1,0 +1,1045 @@
+{% extends "base.html" %}
+
+{% block title %}Employee Profile | Voxlom EMS{% endblock %}
+
+{% block content %}
+<div class="portal-container" style="display: flex; font-family: Arial, sans-serif; font-size: 13px; background-color: #f3f4f6; min-height: 100vh;">
+    
+    
+
+    <!-- Center Module Area: Data Input Form Grid -->
+    <main class="portal-workspace" style="flex: 1; background-color: #ffffff; border-right: 1px solid var(--form-heading); display: flex; flex-direction: column;">
+        <div class="workspace-header" style="background: var(--form-heading); color: #ffffff; font-weight: bold; font-size: 15px; text-align: center; padding: 8px; text-transform: uppercase; border-bottom: 1px solid #cbd5e1;">EMPLOYEE PROFILE OVERVIEW</div>
+        
+        <!-- Header Hero Sub-Bar -->
+        <div style="padding: 16px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 16px; align-items: center; background-color: #fafafa; justify-content: center;">
+            <h2 style="margin: 0; font-size: 18px; color: #0f172a;">Personal Information</h2>
+        </div>
+
+        <!-- Central Workspace Form Body -->
+        <div style="padding: 0px; flex: 1;">
+            <form method="POST" enctype="multipart/form-data" style="margin: 0;">
+                {% csrf_token %}
+                <table class="form-grid-table" style="width: 100%; border-collapse: collapse;">
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="width: 35%; text-align: right;  padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Form of Address</td>
+                            <td style="width: 65%; padding: 8px 12px;">
+                                
+                                <input type="radio" name="form_of_address" value="Mr" required>
+    Mr
+  </label>
+
+  <label style="margin-right: 10px;">
+    <input type="radio" name="form_of_address" value="Mrs">
+    Mrs
+  </label>
+
+  <label style="margin-right: 10px;">
+    <input type="radio" name="form_of_address" value="Miss">
+    Miss
+  </label>
+                                
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>First Name</td>
+                            <td style="padding: 8px 12px;">
+                                <input type="text" name="first_name" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;"  required >
+                                
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Last Name</td>
+                            <td style="padding: 8px 12px;">
+                                <input type="text" name="last_name" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;" >
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Certificate Name</td>
+                            <td style="padding: 8px 12px;">
+                                <input type="text" name="certificate_name" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;"  required >
+                                
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Date of Birth</td>
+                            <td style="padding: 8px 12px;">
+                                
+                                
+<input 
+  id="dob" 
+  type="date" 
+  name="date_of_birth" 
+  class="flat-input date-placeholder" 
+  style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;" 
+  data-placeholder="DD-MM-YYYY" 
+  required
+>
+                          
+                            </td>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+  <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;">
+    <span style="color: #dc2626;">*</span>Marital Status
+  </td>
+  <td style="padding: 8px 12px;">
+    <label style="margin-right: 15px;">
+      <input type="radio" name="marital_status" value="Single" onclick="toggleMarriageCertificate()"> Single
+    </label>
+    <label style="margin-right: 15px;">
+      <input type="radio" name="marital_status" value="Married" onclick="toggleMarriageCertificate()"> Married
+    </label>
+    <label style="margin-right: 15px; display:inline-flex; align-items:center;">
+      <input type="radio" name="marital_status" value="Divorced" onclick="toggleMarriageCertificate()"> Divorced
+      <button id="certificate" style="display:none; margin-left:50px; padding:4px 8px; color:#000000;  cursor:pointer;">
+        Upload Certificate / Wedding Card
+      </button>
+    </label>
+  </td>
+</tr>
+
+
+
+                        <tr id="marriage-date-row" style="border-bottom: 1px solid #e2e8f0; display: none;"></tr>
+                            <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;">Marriage Date</td>
+                            <td style="padding: 8px 12px;">
+                                <input type="date" name="marriage_date" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;">
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Nationality</td>
+                            <td style="padding: 8px 12px;">
+                                <input type="text" name="nationality" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;"  required >
+                                
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Country of Birth</td>
+                        <td style="padding: 8px 12px;">
+                            <input type="text" name="country_of_birth" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;"  >
+                            
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+  <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;">
+    <span style="color: #dc2626;">*</span>Citizen
+  </td>
+  <td style="padding: 8px 8px;">
+    <input type="text" name="citizen" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px; margin-left: 4px;"  >
+    <span style="margin-left: 10px; color:#475569; font-weight:500;">As Per The Passport</span>
+  </td>
+</tr>
+
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>State of Birth</td>
+                        <td style="padding: 8px 12px;">
+                            <input type="text" name="state_of_birth" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;"  required placeholder="">
+                            <span style="margin-left: 10px; color: #475569; font-weight: 500;">As Per The Passport</span>
+                            
+                        </td>
+                        
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>City of Birth</td>
+                        <td style="padding: 8px 12px;">
+                            <input type="text" name="city_of_birth" class="flat-input" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;"  required placeholder="">
+                            
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Dual Citizenship</td>
+                        <td style="padding: 8px 12px;">
+                            <select name="dual_citizenship" class="flat-select" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;" required>
+                                <option value="" disabled selected hidden>Select...</option>
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Gender</td>
+                        <td style="padding: 8px 12px;">
+                            <select name="gender" class="flat-select" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;" required>
+                                <option value="" disabled selected hidden>Select...</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;"><span style="color: #dc2626;">*</span>Upload / View</td>
+                        <td style="padding: 8px 12px;">
+                            <input type="file" name="tenth_certificate" accept=".pdf,.jpg,.jpeg,.png" style="font-size: 12px;" placeholder="10ᵗʰ Certificate" multiple>
+                            <span style="margin-left: 30px; color: #475569; font-weight: 500;">10ᵗʰ&Passport Certificate</span>
+                            {% if employee.tenth_certificate_doc %}
+                                <div style="margin-top: 4px;"><a href="{{ employee.tenth_certificate_doc.url }}" target="_blank" style="color: #0000ff; text-decoration:none;">View Certificate </a></div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+    <td style="text-align: right; padding: 8px 15px; color: #64748b; background-color: #fcfcfc;">HR Reporting Lead</td>
+    <td style="padding: 8px 12px;">
+        <select name="hr_reporting" class="flat-select" style="width: 250px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 3px;">
+            <option value="" disabled selected hidden>Select...</option>
+            
+            <!-- Loop through the HR users from the database -->
+            {% for user in hr_leads %}
+                <option value="{{ user.id }}">{{ user.full_name }}</option>
+            {% endfor %}
+            
+        </select>
+    </td>
+</tr>
+
+                </tbody>
+            </table>
+
+            <!-- Actions Save Panel -->
+            <div style="display: flex; justify-content: center;">
+                <div class="action-panel" style="display: inline-block; justify-content: center; padding: 15px; background-color: #ffffff; margin-top: 15px;">
+                <button type="submit" class="btn-portal btn-portal-submit" style="min-width: 100px; padding: 6px 20px; border: none; background-color: var(--form-submit); color: #ffffff; border-radius: 4px; font-weight: bold; cursor: pointer;">Save</button>
+                
+            </div>
+            <div class="action-panel" style="display: inline-block; justify-content: center; padding: 15px; background-color: #ffffff; margin-top: 15px;">
+                <button type="submit" class="btn-portal btn-portal-submit" style="min-width: 100px; padding: 6px 20px; border: none; background-color: var(--form-submit); color: #ffffff; border-radius: 4px; font-weight: bold; cursor: pointer;">Submit</button>
+                
+            </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- Right Sidebar Pane -->
+<section class="portal-status-pane">
+        <!-- Tab Navigation Bar -->
+        <div class="status-top-bar">
+            <button type="button" class="tab-btn-existing active" id="tab-existing" onclick="switchRightTab('existing')">Existing</button>
+            <button type="button" class="tab-btn-help" id="tab-help" onclick="switchRightTab('help')">Help</button>
+            <button type="button" class="tab-btn-status tab-btn-header-purple" id="tab-workflow" onclick="switchRightTab('workflow')">Approval Flow  / Status</button>
+        </div>
+
+        <div class="status-feed-container">
+            
+            <!-- VIEW 1: Existing Tab Summary Feed -->
+            <!-- <div id="view-existing" class="tab-content-view" style="display: block;">
+                <div class="status-card">
+                    <div class="status-card-header">
+                        <span>Current Profile State</span>
+                        <span style="color: #166534; font-weight: bold;">Logged</span>
+                    </div>
+                    <div class="data-row">
+                        <span>Name :</span>
+                        <span class="data-val">{{ user.personal_details.identity_demographics.first_name|default:"Name not registered" }}</span>
+                    </div>
+                    
+                    <div class="data-row">
+                        <span>Nationality :</span>
+                        <span class="data-val">{{ user.personal_details.identity_demographics.nationality|default:"Nationality not registered" }}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>Country :</span>
+                        <span class="data-val">{{ user.personal_details.identity_demographics.country_of_birth|default:"Country not registered" }}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>State Of Birth :</span>
+                        <span class="data-val">{{ user.personal_details.identity_demographics.state_of_birth|default:"State not registered" }}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>City of Birth :</span>
+                        <span class="data-val">{{ user.personal_details.identity_demographics.city_of_birth|default:"City not registered" }}</span>
+                    </div>
+                    <div class="data-row">
+                        <span>Dual Citizenship :</span>
+                        <span class="data-val">{{ user.personal_details.identity_demographics.dual_citizenship|default:"Not registered" }}</span>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- VIEW 2: Help Tab -->
+            <div id="view-help" class="tab-content-view" style="display: none;">
+                <div style="padding: 5px; font-size: 12px; color: #334155; line-height: 1.5;">
+                    <h4 style="margin: 0 0 6px 0; font-size: 13px;">Compliance Declarations</h4>
+                    <p style="margin: 0 0 8px 0;">Corporate parameters tracking data boundaries require precise active verification dates. Information declared in this module directly influences mandatory healthcare support metrics.</p>
+                </div>
+            </div>
+
+            <!-- VIEW 3: Audit Timeline Tab -->
+            <div id="view-workflow" class="tab-content-view" style="display: none;">
+                <div class="status-card">
+                    <div class="status-card-header">
+                        <span>HR Compliance Audit</span>
+                        <span style="color: #b45309;">In Review</span>
+                    </div>
+
+                    <!-- Approval Flow Tracking Timeline Section -->
+                    <div style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+                        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">
+                            Compliance Progress
+                        </span>
+                        
+                        <!-- Timeline Step 1 -->
+                        <div style="display: flex; gap: 8px; font-size: 12px; margin-bottom: 6px;">
+                            <div style="color: #166534; font-weight: bold;">✓</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #334155;">Data Record Saved</div>
+                                <div style="font-size: 11px; color: #64748b;">Regulatory logs synced to master portal</div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Step 2 -->
+                        <div style="display: flex; gap: 8px; font-size: 12px;">
+                            <div style="color: #94a3b8; font-weight: bold;">○</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #94a3b8;">Corporate Compliance Sign-off</div>
+                                <div style="font-size: 11px; color: #94a3b8;">Awaiting internal governance verification audit</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Read-only Reference Verification Feed -->
+                    <div style="margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 12px; background-color: #f8fafc; border-radius: 4px; padding: 8px;">
+                        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; display: block; margin-bottom: 8px;">
+                            Registry Audit Data
+                        </span>
+
+                        <div style="font-family: monospace; font-size: 11px; color: #334155; line-height: 1.5;">
+                            <div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px;">
+                                <span style="color: #64748b;">DATA BEGIN:</span> 
+                                <span style="font-weight: 600; float: right;">{{ hr_compliance.personal_data_begin_date|default:"-" }}</span>
+                            </div>
+                            <div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px;">
+                                <span style="color: #64748b;">DATA END:</span> 
+                                <span style="font-weight: 600; float: right;">{{ hr_compliance.personal_data_end_date|default:"-" }}</span>
+                            </div>
+                            <div>
+                                <span style="color: #64748b;">DECLARED BY:</span>
+                                                                <span style="font-weight: 600; float: right; text-transform: uppercase;">{{ identity_demographics.first_name }} {{ identity_demographics.last_name }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div> <!-- Closes #view-workflow -->
+
+        </div> <!-- Closes .status-feed-container -->
+    </section>
+
+</div> <!-- Closes portal-container -->
+
+<!-- Vanilla JavaScript View Switcher Engine Matrix -->
+<script>
+function switchProfileTab(targetSection) {
+    // 1. Hide all main center view content panels
+    document.querySelectorAll('.profile-content-view').forEach(panel => {
+        panel.style.display = 'none';
+    });
+
+    // 2. Unhide targeted display content layout container
+    document.getElementById('panel-' + targetSection).style.display = 'block';
+
+    // 3. Reset background colors across all button indicators
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.id === 'tab-documents') {
+            btn.style.backgroundColor = '#60e3fac';
+        } else {
+            btn.style.backgroundColor = '#60e3fa';
+        }
+        btn.style.fontWeight = 'normal';
+    });
+
+    // 4. Enforce bold focus highlights onto active selection
+    const activeTab = document.getElementById('tab-' + targetSection);
+    if (targetSection !== 'documents') {
+        activeTab.style.backgroundColor = '#60e3fa';
+    }
+    activeTab.style.fontWeight = 'bold';
+}
+
+function toggleMarriageCertificate() {
+  const marriedRadio = document.querySelector('input[name="marital_status"][value="Married"]');
+  const certButton = document.getElementById("certificate");
+
+  if (marriedRadio.checked) {
+    certButton.style.display = "block"; // shows next to Married
+  } else {
+    certButton.style.display = "none"; // hides otherwise
+  }
+}
+
+function placeholder () {
+    const inputfield = document.getElementById ("dob");
+     if (inputfield) {
+            inputfield.placeholder = "Type your full name here...";
+        } else {
+            console.error("Input field not found!");
+        }
+}
+
+function switchRightTab(targetTab) {
+    document.querySelectorAll('.tab-content-view').forEach(view => {
+        view.style.display = 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.getElementById('view-' + targetTab).style.display = 'block';
+    document.getElementById('tab-' + targetTab).classList.add('active');
+}
+
+</script>
+{% endblock %}
+
+ 
+
+
+
+
+                             
+{% block extra_css %}
+<style>
+    /* Global layout container mimicking the reference layout */
+    .profile-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #0f172a;
+    background-color: #f8fafc;
+}
+
+/* --- 2. Executive Hero Header Architecture --- */
+.profile-hero {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.profile-hero__bg {
+    height: 100px;
+    background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+    opacity: 0.15;
+}
+
+/* dobplaceholder */
+
+
+
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  text-transform: uppercase;
+}
+/* Right Split Area: Action triggers and Read-only Verification Feed */
+    .portal-status-pane {
+        width: 300px;
+        background-color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+    }
+    .status-top-bar {
+        display: flex;
+        border-bottom: 1px solid #cbd5e1;
+    }
+    .tab-btn {
+        flex: 1;
+        font-size: 12px;
+        border: none;
+        background-color: #f1f5f9;
+        /* border-right: 1px solid #cbd5e1; */
+        cursor: pointer;
+        text-align: center;
+        height: 33.5px;
+        padding-left: 4px;
+        padding-right: 3px;
+        font-weight: bold;
+
+        
+    }
+ 
+
+    /* Right column record tracker stack */
+    .status-feed-container {
+        padding: 12px;
+        overflow-y: auto;
+    }
+    .status-card {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .status-card-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 4px;
+        margin-bottom: 6px;
+    }
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        font-size: 12px;
+    }
+    .data-val {
+        font-weight: bold;
+        color: #1e293b;
+    }
+.profile-hero__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 24px 24px 24px;
+    margin-top: -40px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-hero__identity {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* --- 3. Profile Image Avatar & Badge States --- */
+.profile-avatar {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 12px;
+    border: 4px solid #ffffff;
+    background: #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.profile-avatar__img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.profile-avatar__placeholder {
+    font-size: 42px;
+    color: #94a3b8;
+}
+
+.profile-avatar__status {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    border: 2.5px solid #ffffff;
+}
+
+/* --- 4. Hero Metadata String Elements --- */
+.profile-hero__text {
+    padding-bottom: 4px;
+}
+
+.profile-hero__eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    margin: 0 0 4px 0;
+}
+
+
+
+.profile-hero__title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.profile-hero__title-row h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.profile-role {
+    font-size: 11px;
+    font-weight: 700;
+    background-color: #f3e8ff;
+    color: #6b21a8;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+    border: 1px solid #e9d5ff;
+}
+
+.profile-hero__meta {
+    font-size: 13px;
+    color: #64748b;
+    margin: 6px 0 0 0;
+}
+
+tbody td,label,option {
+     font-family: 'Poppins', sans-serif
+}
+
+/* --- 5. Action Control Desk Interface Links --- */
+.profile-hero__actions {
+    display: flex;
+    gap: 8px;
+    padding-bottom: 4px;
+}
+ tbody td,label,option {
+     font-family: 'Poppins', sans-serif
+}
+
+.btn-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-profile--ghost {
+    background-color: #ffffff;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-profile--ghost:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+.btn-profile--primary {
+    background-color: #6b21a8;
+    color: #ffffff;
+    border: 1px solid transparent;
+}
+@media screen and (max-width: 768px) {
+    .responsive-row, 
+    .responsive-label, 
+    .responsive-input-cell {
+        display: block;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .responsive-label {
+        text-align: left;
+        padding: 8px 12px 4px 12px;
+        background-color: transparent;
+    }
+
+    .responsive-input-cell {
+        padding: 4px 12px 12px 12px;
+        overflow-x: auto; /* Safely adds horizontal scrolling inside the cell if zoomed past screen limits */
+    }
+
+    .upload-flex-container {
+        flex-direction: row !important; /* Locks horizontal engine on small screens and zoom states */
+        align-items: center;
+    }
+}
+
+.btn-profile--primary:hover {
+    background-color: #581c87;
+}
+
+/* --- 6. Quick Telemetry Stats Grid --- */
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    border-top: 1px solid #e2e8f0;
+    background-color: #fafafa;
+}
+
+.profile-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-right: 1px solid #e2e8f0;
+}
+
+.profile-stat:last-child {
+    border-right: none;
+}
+/* input[type="date"]::-webkit-datetime-edit {
+  color: transparent;  
+}
+input[type="date"]:focus::-webkit-datetime-edit {
+  color: initial;       
+}
+
+
+input[type="date"]::-moz-placeholder {
+  color: transparent;
+} */
+
+.profile-stat i {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.profile-stat__label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.profile-stat__value {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 2px;
+}
+
+/* --- 7. Segment Interactivity Selector Tabs --- */
+.profile-switcher {
+    width: 100%;
+}
+
+.profile-switcher__card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.profile-switcher__tabs {
+    display: flex;
+    background-color: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+    overflow-x: auto;
+}
+
+.profile-switcher__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    background: transparent;
+    border: none;
+    border-right: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.profile-switcher__tab i {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.profile-switcher__tab:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+.profile-switcher__tab.is-active {
+    background-color: #ffffff;
+    color: #6b21a8;
+    position: relative;
+}
+
+.profile-switcher__tab.is-active i {
+    color: #a855f7;
+}
+
+.profile-switcher__tab.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #a855f7;
+}
+
+/* --- 8. Centralized Workspace Content Panels --- */
+.profile-switcher__body {
+    padding: 24px;
+}
+
+.profile-panel__head {
+    margin-bottom: 20px;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 12px;
+}
+
+.profile-panel__head h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 4px 0;
+}
+
+.profile-panel__head p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* --- 9. Fields Metrics Tabular Display Layout --- */
+.profile-fields {
+    display: grid;
+    gap: 16px 24px;
+}
+
+.profile-fields--3 {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.profile-fields--2 {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-field--wide {
+    grid-column: 1 / -1;
+}
+
+.profile-field__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.profile-field__value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.profile-field__value--cap {
+    text-transform: capitalize;
+}
+
+.profile-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #6b21a8;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.profile-phone:hover {
+    color: #581c87;
+}
+
+/* --- 10. Address Block List Formats --- */
+.profile-address-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+/* input[type="date"]::-webkit-datetime-edit {
+  color: transparent;  
+} */
+
+
+.profile-address__icon {
+    font-size: 16px;
+    color: #a855f7;
+    background-color: #f3e8ff;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-address p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin: 4px 0 0 0;
+}
+
+/* --- 11. Timeline Chronology Audit Steps --- */
+.profile-timeline {
+    position: relative;
+    border-left: 2px solid #cbd5e1;
+    margin: 0 0 24px 8px;
+    padding: 4px 0 4px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-timeline__item {
+    position: relative;
+}
+
+.profile-timeline__dot {
+    position: absolute;
+    left: -21px;
+    top: 2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
+
+.profile-timeline__dot--start {
+    background-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.profile-timeline__dot--end {
+    background-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* --- 12. Document Card File Enclosure Modules --- */
+.profile-docs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.profile-doc {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+}
+
+.profile-doc__icon {
+    font-size: 20px;
+}
+
+.profile-doc__body {
+    flex: 1;
+}
+
+.profile-doc__title {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+.profile-doc__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.profile-doc__action {
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+/* Verification State Theme Variations */
+.profile-doc--ok {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.profile-doc--ok .profile-doc__icon {
+    color: #22c55e;
+}
+
+.profile-doc--ok:hover {
+    border-color: #86efac;
+    background-color: #f6fef9;
+}
+
+.profile-doc--ok:hover .profile-doc__action {
+    color: #166534;
+}
+
+.profile-doc--missing {
+    background-color: #fffaf0;
+    border: 1px dashed #fed7aa;
+    color: #c2410c;
+}
+
+.profile-doc--missing .profile-doc__icon {
+    color: #f97316;
+}
+
+.profile-doc__status--warn {
+    color: #ea580c;
+}
+
+/* --- 13. Responsive View Bounds Adjustments --- */
+@media (max-width: 768px) {
+    .profile-hero__inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -55px;
+    }
+}
+</style>
+
+{% endblock %}
